@@ -4,7 +4,7 @@
 
 ## **Introduction**
 
-This guide details how I set up an **Azure Virtual Machine (VM) Honeypot**, configured **log forwarding** to Microsoft Sentinel, and analyzed security logs using **KQL queries**.
+This guide details how I set up an **Azure Virtual Machine (VM) Honeypot**, configured **log forwarding** to Microsoft Sentinel, and analyzed security logs using **KQL queries**. I am following the walkthrough by Josh Madakor (https://youtu.be/g5JL2RIbThM)
 
  **Key Concepts Covered:**
 
@@ -36,8 +36,6 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
 
  **Azure Portal**: [https://portal.azure.com](https://portal.azure.com/)
 
-📷 **Screenshot:** _(Insert Azure portal login page screenshot here)_
-
 ----------
 
 ## **Part 2: Deploying the Honeypot (Azure Virtual Machine)**
@@ -50,7 +48,8 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
 4.  Choose an appropriate VM size _(If you're in Cyber Range, the size will be limited)_.
 5.  **Set a username & password** _(Store securely!)_
 
-📷 **Screenshot:** _(Insert VM creation page screenshot here)_
+![Screenshot 2025-02-18 165439](https://github.com/user-attachments/assets/f5d5393a-0110-46c0-ac0b-9203011ffa6a)
+
 
 ### **Step 2: Configure Network Security Group (NSG) Rules**
 
@@ -60,7 +59,6 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
     -   **Port:** Any
     -   **Action:** **Allow All Traffic** _(Simulates an exposed system)_
 
-📷 **Screenshot:** _(Insert NSG rule configuration screenshot here)_
 
 ### **Step 3: Disable Windows Firewall**
 
@@ -68,9 +66,8 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
 2.  Open **Run (`Win + R`) → Type `wf.msc` → Enter**.
 3.  **Disable** all firewall profiles _(Domain, Private, Public)_.
 
-📷 **Screenshot:** _(Insert Windows Firewall settings screenshot here)_
+![Screenshot 2025-02-18 181033](https://github.com/user-attachments/assets/d043e50e-96ff-4119-a8fb-6eac7521ed9c)
 
-----------
 
 ## **Part 3: Simulating Brute Force Attacks & Log Inspection**
 
@@ -79,7 +76,8 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
 1.  Attempt to log in **incorrectly 3 times** using the username `"employee"`.
 2.  Log in successfully on the **4th attempt**.
 
-📷 **Screenshot:** _(Insert incorrect login attempts screenshot here)_
+![Screenshot 2025-02-18 180454](https://github.com/user-attachments/assets/c17d58b6-0017-4008-a8bf-75482d1556d4)
+
 
 ### **Step 2: Inspect Security Logs in Event Viewer**
 
@@ -87,7 +85,11 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
 2.  Navigate to: **Windows Logs → Security**.
 3.  Look for **Event ID: 4625** (Failed Login Attempts).
 
-📷 **Screenshot:** _(Insert Event Viewer logs screenshot here)_
+![Screenshot 2025-02-18 181033](https://github.com/user-attachments/assets/ab99ada9-782f-4231-9b02-7edc589d16ce)
+
+
+![Screenshot 2025-02-18 180815](https://github.com/user-attachments/assets/488e3910-4439-4b94-a344-d7eebac8a851)
+
 
 ----------
 
@@ -100,14 +102,16 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
 3.  Select **Pricing Tier: Pay-as-you-go**.
 4.  Click **Create**.
 
-📷 **Screenshot:** _(Insert Log Analytics Workspace creation screenshot here)_
+![Screenshot 2025-02-18 181352](https://github.com/user-attachments/assets/09ea721e-ba1c-45b3-abc0-99597965ec9b)
+
 
 ### **Step 2: Deploy Microsoft Sentinel**
 
 1.  Go to **Microsoft Sentinel**.
 2.  Click **Create Sentinel Instance → Connect to Log Analytics**.
 
-📷 **Screenshot:** _(Insert Sentinel setup screenshot here)_
+![Screenshot 2025-02-18 183144](https://github.com/user-attachments/assets/f0a0e38a-87a7-4e9c-8e14-279557d300a8)
+
 
 ### **Step 3: Enable Windows Security Events Forwarding**
 
@@ -115,7 +119,8 @@ I attempted to sign up for **Azure’s Free Tier** via [Azure Free Tier](https:/
 2.  Select **Windows Security Events via AMA**.
 3.  Configure **Data Collection Rule (DCR)** to forward logs.
 
-📷 **Screenshot:** _(Insert Sentinel data connector setup screenshot here)_
+![Screenshot 2025-02-18 183705](https://github.com/user-attachments/assets/73461cca-e013-49bf-b3d2-adf2b1b606c5)
+
 
 ### **Step 4: Query Logs Using KQL (Kusto Query Language)**
 
@@ -131,7 +136,8 @@ SecurityEvent
 
 ```
 
-📷 **Screenshot:** _(Insert KQL query execution screenshot here)_
+![Screenshot 2025-02-18 190906](https://github.com/user-attachments/assets/3c30111a-0350-4557-8805-3258167e7715)
+
 
 ----------
 
@@ -139,13 +145,14 @@ SecurityEvent
 
 ### **Step 1: Import GeoIP Database as a Sentinel Watchlist**
 
-1.  Download **`geoip-summarized.csv`**.
+1.  Download **`geoip-summarized.csv`** _(This can be found on Josh Madakor's walkthrough video, link at the top)_
 2.  In **Sentinel → Watchlists**, create a new watchlist:
     -   **Name/Alias:** `geoip`
     -   **Source Type:** Local File
     -   **Search Key:** `network`
 
-📷 **Screenshot:** _(Insert Watchlist import screenshot here)_
+![Screenshot 2025-02-18 193434](https://github.com/user-attachments/assets/2f3853ad-81e3-4beb-b86d-937bfeeac05e)
+
 
 ### **Step 2: Query Logs with GeoIP Enrichment**
 
@@ -165,8 +172,9 @@ let WindowsEvents = SecurityEvent
 WindowsEvents
 
 ```
+<img width="960" alt="Screenshot 2025-02-18 202345" src="https://github.com/user-attachments/assets/6fccebfc-c071-458b-826c-ad617c2bdcb8" />
 
-📷 **Screenshot:** _(Insert enriched log output screenshot here)_
+![Screenshot 2025-02-18 202731](https://github.com/user-attachments/assets/89edf671-44b5-4e84-babb-4e2801e5fc8d)
 
 ----------
 
@@ -178,15 +186,19 @@ WindowsEvents
 2.  Delete pre-populated elements.
 3.  Click **Add Query Element**.
 
-📷 **Screenshot:** _(Insert Workbook setup screenshot here)_
+![Screenshot 2025-02-19 020455](https://github.com/user-attachments/assets/e5deeb3c-aefe-44f1-ae52-c653079f3651)
+
+![Screenshot 2025-02-19 020334](https://github.com/user-attachments/assets/e887f5bc-0fec-406b-b8fb-d93ea508c7f3)
+
 
 ### **Step 2: Import JSON for Attack Map**
 
 1.  Open **Advanced Editor**.
-2.  Paste the JSON from **`map.json`** (provided separately).
+2.  Paste the JSON from **`map.json`** _(provided separately)_.
 3.  Save & observe the real-time attack visualization.
 
-📷 **Screenshot:** _(Insert attack map screenshot here)_
+![Screenshot 2025-02-19 021026](https://github.com/user-attachments/assets/f9933c49-c77c-4c2d-b326-7944f1d50364)
+
 
 ----------
 
