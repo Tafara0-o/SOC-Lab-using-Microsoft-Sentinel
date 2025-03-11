@@ -4,7 +4,7 @@
 
 ## **Introduction**
 
-This guide details how I set up an **Azure Virtual Machine (VM) Honeypot**, configured **log forwarding** to Microsoft Sentinel, and analyzed security logs using **KQL queries**. I am following the walkthrough by Josh Madakor (https://youtu.be/g5JL2RIbThM)
+This guide details how I set up an **Azure Virtual Machine (VM) Honeypot**, configured **log forwarding** to Microsoft Sentinel, and analyzed security logs using **KQL queries**. I am following the walkthrough by [Josh Madakor](https://youtu.be/g5JL2RIbThM)
 
  **Key Concepts Covered:**
 
